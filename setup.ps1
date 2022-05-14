@@ -108,9 +108,7 @@ function Test-SpotifyVersion
 Write-Host @'
 *****************
 SpotiDon't Current Alerts:
-A Spotify Update has Broke SpotiDon't.
-SpotiDon't will Downgrade your Spotify Installation
-If its updated.
+Possible Patch, RN working on a new one. This should be 80% working now.
 *****************
 '@
 
@@ -167,7 +165,7 @@ catch
   exit
 }
 
-Write-Host "Downloading latest patch (chrome_elf.zip)...`n"
+Write-Host "Downloading Checksum Files (Prevents SpotiDont Modifications)...`n"
 $elfPath = Join-Path -Path $PWD -ChildPath 'chrome_elf.zip'
 try
 {
@@ -188,7 +186,7 @@ $unsupportedClientVersion = ($actualSpotifyClientVersion | Test-SpotifyVersion -
 
 if (-not $UpdateSpotify -and $unsupportedClientVersion)
 {
-  if ((Read-Host -Prompt 'In order to install SpotiDont, your Spotify client must be Downgraded. Do you want to continue? (Y/N)') -ne 'y')
+  if ((Read-Host -Prompt 'In order to install SpotiDont, your Spotify client will be Reinstalled. Do you want to continue? (Y/N)') -ne 'y')
   {
     exit
   }
@@ -196,7 +194,7 @@ if (-not $UpdateSpotify -and $unsupportedClientVersion)
 
 if (-not $spotifyInstalled -or $UpdateSpotify -or $unsupportedClientVersion)
 {
-  Write-Host 'Downloading the Old Spotify full setup, please wait...'
+  Write-Host 'Downloading and Installing the Modded Version Of Spotify'
   $spotifySetupFilePath = Join-Path -Path $PWD -ChildPath 'SpotifyFullSetup.exe'
   try
   {
@@ -276,7 +274,7 @@ if ((Test-Path $elfDllBackFilePath) -eq $false)
   Move-Item -LiteralPath "$elfBackFilePath" -Destination "$elfDllBackFilePath" | Write-Verbose
 }
 
-Write-Host 'Patching Spotify...'
+Write-Host 'Checking Spotidont Installation Using the Checksum Files...'
 $patchFiles = (Join-Path -Path $PWD -ChildPath 'chrome_elf.dll'), (Join-Path -Path $PWD -ChildPath 'config.ini')
 
 Copy-Item -LiteralPath $patchFiles -Destination "$spotifyDirectory"
@@ -313,7 +311,7 @@ if ($RemoveAdPlaceholder)
   }
   else
   {
-    Write-Host 'Could not find xpui.js, please open an issue on the SpotiDont repository.'
+    Write-Host 'Could not find xpui.js, please DM the Owner.'
   }
 
   if ($xpuiContents)
@@ -354,16 +352,17 @@ Pop-Location
 
 Remove-Item -LiteralPath $tempDirectory -Recurse
 
-Write-Host 'Patching Complete, starting Spotify...'
+Write-Host 'Patching Complete, starting SpotiDont...'
 
 Start-Process -WorkingDirectory $spotifyDirectory -FilePath $spotifyExecutable
 Write-Host 'Done.'
 
 Write-Host @'
 *****************
-SpotiDon't Current Alerts:
-A Spotify Update has Broke SpotiDon't.
-SpotiDon't will Downgrade your Spotify Installation
-If its updated.
+Known Issues:
+On Screen Ads when Another Device is on Spotify/Playing
+-----------
+Spotify Constantly Updating, requiring for people 
+to reinstall the script. L3m0n is Working on a Fix.
 *****************
 '@
